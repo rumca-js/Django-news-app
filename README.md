@@ -1,2 +1,3 @@
-# Django-news-app
-Django links for news application
+# Overview
+
+Django python project for collecting links for news.

@@ -1,0 +1,20 @@
+{% extends base_generic %}
+
+{% block content %}
+  <h1>News Index</h1>
+  <p>This is a News/links index.</p>
+  <h2>Dynamic content</h2>
+  <p>The index contents:</p>
+  <ul>
+    <li><strong>Links:</strong> {{ num_links }}</li>
+  </ul>
+
+Let the refresh button F5 be with you!
+
+<div>
+<img src="https://i.kym-cdn.com/photos/images/newsfeed/001/582/307/98c.jpg" width="30%">
+</div>
+
+Version: {{version}}
+
+{% endblock %}
