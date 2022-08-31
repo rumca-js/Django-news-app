@@ -49,7 +49,7 @@ class LinkListView(generic.ListView):
 
     def get_queryset(self):
         parameter_map = self.get_filters()
-        self._tmp = LinkDataModel.objects.filter(**parameter_map).order_by('title')
+        self._tmp = LinkDataModel.objects.filter(**parameter_map)
 
         return self._tmp
 
@@ -122,13 +122,8 @@ class LinkDetailView(generic.DetailView):
         # Call the base implementation first to get the context
         context = super(LinkDetailView, self).get_context_data(**kwargs)
         context = init_context(context)
-        # Create any data and add it to the context
-        #url = self.object.url
 
-        #if LinkDataModel.objects.filter(url=url).exists():
-        #    # TODO test if it is youtube
-        #    obj = YouTubeLinkBasic(self.object.url)
-        #    context['embed_link'] = obj.get_embed_link()
+        context['date_created'] = self.object.date_created
         context['page_title'] = self.object.title
         return context
 

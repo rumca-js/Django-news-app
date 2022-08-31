@@ -3,18 +3,41 @@
 {% block content %}
   <h1>News Index</h1>
   <p>This is a News/links index.</p>
-  <h2>Dynamic content</h2>
-  <p>The index contents:</p>
+
+  <h2>Content</h2>
   <ul>
     <li><strong>Links:</strong> {{ num_links }}</li>
   </ul>
 
-Let the refresh button F5 be with you!
+  <h2>Details</h2>
+  With this server you can:
+  <ul>
+    <li>create a database of news/articles</li>
+    <li>you can decide which links are important to you</li>
+  </ul>
 
-<div>
-<img src="https://i.kym-cdn.com/photos/images/newsfeed/001/582/307/98c.jpg" width="30%">
-</div>
+  <h2>Your own</h2>
+  <ul>
+    <li>You can create your own instance: <a href="https://github.com/rumca-js/Django-news-app">GitHub</a></li>
+    <li>You can edit templates, styles</li>
+    <li>You can change icons: <a href="https://icons8.com/icons/">https://icons8.com/icons/</a></li>
+  </ul>
+  
+  <p>
+  Let the refresh button F5 be with you!
+  </p>
+  
+  <p>
+  <img src="/static/images/piesel.jpg" width="30%">
+  </p>
 
-Version: {{version}}
+  <p>
+    <div>
+    Version: {{version}}
+    </div>
+    <div>
+    Source: <a href="https://github.com/rumca-js/Django-news-app">GitHub</a>
+    </div>
+  </p>
 
 {% endblock %}

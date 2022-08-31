@@ -12,12 +12,10 @@ class LinkDataModel(models.Model):
     subcategory = models.TextField(max_length=1000, help_text='subcategory')
     tag = models.TextField(max_length=1000, help_text='tag')
     date_saved = models.DateTimeField(auto_now = True)
-    date_created = models.DateTimeField(auto_now = False, auto_now_add = True)
-    #date_saved = models.DateField(auto_now = True)
-    #date_created = models.DateField(auto_now = False, auto_now_add = True)
+    date_created = models.DateTimeField(auto_now = False, auto_now_add = False)
 
     class Meta:
-        ordering = ['artist', 'album', 'title']
+        ordering = ['date_created', 'artist', 'album', 'title']
 
     def get_absolute_url(self):
         """Returns the URL to access a particular author instance."""
