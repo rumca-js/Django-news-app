@@ -4,7 +4,7 @@ from django.urls import reverse
 
 class LinkDataModel(models.Model):
 
-    url = models.TextField(max_length=2000, help_text='url')
+    url = models.TextField(max_length=2000, help_text='url', unique=True)
     artist = models.TextField(max_length=1000, help_text='artist')
     album = models.TextField(max_length=1000, help_text='album')
     title = models.TextField(max_length=1000, help_text='title')

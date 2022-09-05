@@ -45,13 +45,11 @@ def index(request):
 class LinkListView(generic.ListView):
     model = LinkDataModel
     context_object_name = 'link_list'
-    #paginate_by = 10
+    paginate_by = 1000
 
     def get_queryset(self):
-        parameter_map = self.get_filters()
-        self._tmp = LinkDataModel.objects.filter(**parameter_map)
-
-        return self._tmp
+        self.filter_form = ChoiceForm(args = self.request.GET)
+        return self.filter_form.get_filtered_objects()
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get the context
@@ -59,23 +57,9 @@ class LinkListView(generic.ListView):
         context = init_context(context)
         # Create any data and add it to the context
 
-        categories = self.get_uniq('category')
-        subcategories = self.get_uniq('subcategory')
-        artists = self.get_uniq('artist')
-        albums = self.get_uniq('album')
+        self.filter_form.create()
 
-        categories = self.to_dict(categories)
-        subcategories = self.to_dict(subcategories)
-        artists = self.to_dict(artists)
-        albums = self.to_dict(albums)
-
-        category_form = ChoiceForm(categories = categories,
-                                    subcategories = subcategories,
-                                    artists = artists,
-                                    albums = albums,
-                                    filters = self.get_filters())
-
-        context['category_form'] = category_form
+        context['category_form'] = self.filter_form
         context['page_title'] = "News link list"
 
         return context
@@ -183,7 +167,6 @@ def import_links(request):
             rawlinks = form.cleaned_data['rawlinks']
             links = LinksData(rawlinks)
             for link in links.links:
-
                 if LinkDataModel.objects.filter(url=link.url).exists():
                     summary_text += link.title + " " + link.url + " " + link.artist + " Error: Already present in db\n"
                 else:
@@ -192,7 +175,8 @@ def import_links(request):
                                                 album=link.album,
                                                 title=link.title,
                                                 category=link.category,
-                                                subcategory=link.subcategory)
+                                                subcategory=link.subcategory,
+                                             date_created=link.date_created)
                     record.save()
                     summary_text += link.title + " " + link.url + " " + link.artist + " OK\n"
 
