@@ -18,6 +18,10 @@ def init_context(context):
     context["page_title"] = "YouTube Index"
     context["django_app"] = str(app_dir)
     context["base_generic"] = str(app_dir / "base_generic.html")
+
+    c = Configuration.get_object()
+    context['app_version'] = c.version
+
     return context
 
 def get_context(request = None):
@@ -27,8 +31,6 @@ def get_context(request = None):
 
 
 def index(request):
-    c = Configuration.get_object()
-
     # Generate counts of some of the main objects
     num_links = LinkDataModel.objects.all().count()
 
@@ -36,7 +38,6 @@ def index(request):
 
     context['num_links'] = num_links
     context['page_title'] = "News Index"
-    context['version'] = c.version
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, app_dir / 'index.html', context=context)

@@ -2,7 +2,7 @@ from pathlib import Path
 from .threads import *
 from .basictypes import *
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 class Configuration(object):
