@@ -2,7 +2,7 @@ from pathlib import Path
 from .threads import *
 from .basictypes import *
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 
 class Configuration(object):
@@ -15,6 +15,14 @@ class Configuration(object):
        self.server_log_file = self.directory / "server_log_file.txt"
 
        self.enable_logging()
+
+   def get_export_path(self):
+       from .views import app_name
+       return self.directory / 'exports' / app_name
+
+   def get_data_path(self):
+       from .views import app_name
+       return self.directory / 'data' / app_name
 
    def get_object():
        if not Configuration.obj:

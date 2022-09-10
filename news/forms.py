@@ -12,57 +12,17 @@ from .models import LinkDataModel
 #        fields = ['url', 'category', 'subcategory', 'artist', 'album', 'title', 'date_created']
 
 
-class NewLinkForm(forms.Form):
+class NewLinkForm(forms.ModelForm):
     """
     New link form
     """
-    url = forms.CharField(label='Url', max_length = 500)
-    category = forms.CharField(label='Category', max_length = 100)
-    subcategory = forms.CharField(label='Subcategory', max_length = 100)
-    artist = forms.CharField(label='Artist', max_length = 100)
-    album = forms.CharField(label='Album', max_length = 100)
-    title = forms.CharField(label='Title', max_length = 200)
-    date_created = forms.DateTimeField(label='Data')
-
     class Meta:
         model = LinkDataModel
+        fields = ['url', 'title', 'category', 'subcategory', 'date_created']
+        widgets = {
+         #'git_token': forms.PasswordInput(),
+        }
         exclude = ('date_created',)
-
-    def __init__(self, *args, **kwargs):
-        init_obj = kwargs.pop('init_obj', ())
-
-        super().__init__(*args, **kwargs)
-
-        if init_obj != ():
-            self.fields['url'] = forms.CharField(label='Url', max_length = 500, initial=init_obj.url)
-            self.fields['category'] = forms.CharField(label='Category', max_length = 100, initial=init_obj.category)
-            self.fields['subcategory'] = forms.CharField(label='Subcategory', max_length = 100, initial=init_obj.subcategory)
-            self.fields['artist'] = forms.CharField(label='Artist', max_length = 100, initial=init_obj.artist)
-            self.fields['album'] = forms.CharField(label='Album', max_length = 100, initial=init_obj.album)
-            self.fields['title'] = forms.CharField(label='Title', max_length = 100, initial=init_obj.title)
-            self.fields['date_created'] = forms.DateTimeField(label='Data', initial=init_obj.date_created)
-        else:
-            from django.utils.timezone import now
-            self.fields['date_created'] = forms.DateTimeField(label='Data', initial=now)
-
-    def to_model(self):
-        url = self.cleaned_data['url']
-        artist = self.cleaned_data['artist']
-        album = self.cleaned_data['album']
-        category = self.cleaned_data['category']
-        subcategory = self.cleaned_data['subcategory']
-        title = self.cleaned_data['title']
-        date_created = self.cleaned_data['date_created']
-
-        record = LinkDataModel(url=url,
-                                    artist=artist,
-                                    album=album,
-                                    title=title,
-                                    category=category,
-                                    subcategory=subcategory,
-                                    date_created=date_created)
-
-        return record
 
 
 class ImportLinksForm(forms.Form):

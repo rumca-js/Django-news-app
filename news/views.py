@@ -11,13 +11,13 @@ from pathlib import Path
 
 
 # https://stackoverflow.com/questions/66630043/django-is-loading-template-from-the-wrong-app
-app_dir = Path("news")
+app_name = Path("news")
 
 
 def init_context(context):
     context["page_title"] = "YouTube Index"
-    context["django_app"] = str(app_dir)
-    context["base_generic"] = str(app_dir / "base_generic.html")
+    context["django_app"] = str(app_name)
+    context["base_generic"] = str(app_name / "base_generic.html")
 
     c = Configuration.get_object()
     context['app_version'] = c.version
@@ -37,10 +37,9 @@ def index(request):
     context = get_context(request)
 
     context['num_links'] = num_links
-    context['page_title'] = "News Index"
 
     # Render the HTML template index.html with the data in the context variable
-    return render(request, app_dir / 'index.html', context=context)
+    return render(request, app_name / 'index.html', context=context)
 
 
 class LinkListView(generic.ListView):
@@ -61,7 +60,7 @@ class LinkListView(generic.ListView):
         self.filter_form.create()
 
         context['category_form'] = self.filter_form
-        context['page_title'] = "News link list"
+        context['page_title'] += " - link list"
 
         return context
 
@@ -109,13 +108,13 @@ class LinkDetailView(generic.DetailView):
         context = init_context(context)
 
         context['date_created'] = self.object.date_created
-        context['page_title'] = self.object.title
+        context['page_title'] += " - " + self.object.title
         return context
 
 
 def add_link(request):
     context = get_context(request)
-    context['page_title'] = "Add link"
+    context['page_title'] += " - Add link"
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -126,19 +125,19 @@ def add_link(request):
 
         # check whether it's valid:
         if form.is_valid():
-            model = form.to_model()
+            form.save()
 
-            ft = LinkDataModel.objects.filter(url=model.url)
+            ft = LinkDataModel.objects.filter(url=form.url)
             if ft.exists():
                 context['form'] = form
                 context['link'] = ft[0]
-                return render(request, app_dir / 'add_link_exists.html', context)
+                return render(request, app_name / 'add_link_exists.html', context)
             else:
                 model.save()
 
                 context['form'] = form
                 context['link'] = model
-                return render(request, app_dir / 'add_link_added.html', context)
+                return render(request, app_name / 'add_link_added.html', context)
         #    # process the data in form.cleaned_data as required
         #    # ...
         #    # redirect to a new URL:
@@ -149,13 +148,13 @@ def add_link(request):
         form = NewLinkForm()
         context['form'] = form
 
-    return render(request, app_dir / 'add_link.html', context)
+    return render(request, app_name / 'add_link.html', context)
 
 
 def import_links(request):
     summary_text = ""
     context = get_context(request)
-    context['page_title'] = "Import links"
+    context['page_title'] += " - Import links"
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -183,44 +182,44 @@ def import_links(request):
 
         context["form"] = form
         context['summary_text'] = summary_text
-        return render(request, app_dir / 'import_links_summary.html', context)
+        return render(request, app_name / 'import_links_summary.html', context)
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = ImportLinksForm()
         context["form"] = form
-        context['page_title'] = "Import links"
-        return render(request, app_dir / 'import_links.html', context)
+        context['page_title'] += " - Import links"
+        return render(request, app_name / 'import_links.html', context)
 
 
 def remove_link(request, pk):
     context = get_context(request)
-    context['page_title'] = "Remove link"
+    context['page_title'] += " - Remove link"
 
     ft = LinkDataModel.objects.filter(id=pk)
     if ft.exists():
         ft.delete()
-        return render(request, app_dir / 'remove_link_ok.html', context)
+        return render(request, app_name / 'remove_link_ok.html', context)
     else:
-        return render(request, app_dir / 'remove_link_nok.html', context)
+        return render(request, app_name / 'remove_link_nok.html', context)
 
 
 def remove_all_links(request):
     context = get_context(request)
-    context['page_title'] = "Remove all links"
+    context['page_title'] += " - Remove all links"
 
     ft = LinkDataModel.objects.all()
     if ft.exists():
         ft.delete()
-        return render(request, app_dir / 'remove_all_links_ok.html', context)
+        return render(request, app_name / 'remove_all_links_ok.html', context)
     else:
-        return render(request, app_dir / 'remove_all_links_nok.html', context)
+        return render(request, app_name / 'remove_all_links_nok.html', context)
 
 
 
 def export_data(request):
     context = get_context(request)
-    context['page_title'] = "Export data"
+    context['page_title'] += " - Export data"
     summary_text = ""
 
     links = LinkDataModel.objects.all()
@@ -230,14 +229,14 @@ def export_data(request):
 
     context["summary_text"] = summary_text
 
-    return render(request, app_dir / 'summary_present.html', context)
+    return render(request, app_name / 'summary_present.html', context)
 
 
 from .prjconfig import Configuration
 
 def configuration(request):
     context = get_context(request)
-    context['page_title'] = "Configuration"
+    context['page_title'] += " - Configuration"
     
     c = Configuration.get_object()
     context['directory'] = c.directory
@@ -246,17 +245,17 @@ def configuration(request):
     context['database_size_kbytes'] = get_directory_size_bytes(c.directory)/1024
     context['database_size_mbytes'] = get_directory_size_bytes(c.directory)/1024/1024
 
-    return render(request, app_dir / 'configuration.html', context)
+    return render(request, app_name / 'configuration.html', context)
 
 
 def edit_link(request, pk):
     context = get_context(request)
-    context['page_title'] = "Edit link"
+    context['page_title'] += " - Edit link"
     context['pk'] = pk
 
     ft = LinkDataModel.objects.filter(id=pk)
     if not ft.exists():
-       return render(request, app_dir / 'edit_link_does_not_exist.html', context)
+       return render(request, app_name / 'edit_link_does_not_exist.html', context)
 
     obj = ft[0]
 
@@ -273,15 +272,15 @@ def edit_link(request, pk):
                 model.save()
 
                 context['link'] = ft[0]
-                return render(request, app_dir / 'edit_link_ok.html', context)
+                return render(request, app_name / 'edit_link_ok.html', context)
             else:
                 model.save()
-                return render(request, app_dir / 'edit_link_does_not_exist.html', context)
+                return render(request, app_name / 'edit_link_does_not_exist.html', context)
 
         context['summary_text'] = "Could not edit link"
 
-        return render(request, app_dir / 'summary_present', context)
+        return render(request, app_name / 'summary_present', context)
     else:
         form = NewLinkForm(init_obj=obj)
         context['form'] = form
-        return render(request, app_dir / 'edit_link.html', context)
+        return render(request, app_name / 'edit_link.html', context)
