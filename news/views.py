@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
+from django.urls import reverse
 
 from django.db.models.query import QuerySet
 from django.db.models.query import EmptyQuerySet
@@ -146,9 +147,11 @@ def add_link(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = NewLinkForm()
+        form.method = "POST"
+        form.action_url = reverse('news:addlink')
         context['form'] = form
 
-    return render(request, app_name / 'add_link.html', context)
+    return render(request, app_name / 'form_basic.html', context)
 
 
 def import_links(request):
@@ -187,9 +190,12 @@ def import_links(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = ImportLinksForm()
+        form.method = "POST"
+        form.action_url = reverse('news:importlinks')
+
         context["form"] = form
         context['page_title'] += " - Import links"
-        return render(request, app_name / 'import_links.html', context)
+        return render(request, app_name / 'form_basic.html', context)
 
 
 def remove_link(request, pk):
@@ -282,5 +288,7 @@ def edit_link(request, pk):
         return render(request, app_name / 'summary_present', context)
     else:
         form = NewLinkForm(init_obj=obj)
+        form.method = "POST"
+        form.action_url = reverse('news:editlink',args=[pk])
         context['form'] = form
-        return render(request, app_name / 'edit_link.html', context)
+        return render(request, app_name / 'basic_form.html', context)
