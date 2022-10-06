@@ -59,45 +59,13 @@ class LinkListView(generic.ListView):
         # Create any data and add it to the context
 
         self.filter_form.create()
+        self.filter_form.method = "GET"
+        self.filter_form.action_url = reverse('news:links')
 
         context['category_form'] = self.filter_form
-        context['page_title'] += " - link list"
+        context['page_title'] += " - Link list"
 
         return context
-
-    def get_uniq(self, field):
-        values = set()
-        for val in self._tmp.values(field):
-            if str(val).strip() != "":
-                values.add(val[field])
-        return values
-
-    def to_dict(self, alist):
-        result = [('Any', 'Any')]
-        for item in sorted(alist):
-            if item.strip() != "":
-                result.append((item, item))
-        return result
-
-    def get_filters(self):
-        parameter_map = {}
-
-        category = self.request.GET.get("category")
-        if category and category != "Any":
-           parameter_map['category'] = category
-
-        subcategory = self.request.GET.get("subcategory")
-        if subcategory and subcategory != "Any":
-           parameter_map['subcategory'] = subcategory
-
-        artist = self.request.GET.get("artist")
-        if artist and artist != "Any":
-           parameter_map['artist'] = artist
-
-        album = self.request.GET.get("album")
-        if album and album != "Any":
-           parameter_map['album'] = album
-        return parameter_map
 
 
 class LinkDetailView(generic.DetailView):
@@ -131,7 +99,7 @@ def add_link(request):
         if form.is_valid():
             form.save()
 
-            ft = LinkDataModel.objects.filter(url=form.url)
+            ft = LinkDataModel.objects.filter(url=request.POST.get('url'))
             if ft.exists():
                 context['form'] = form
                 context['link'] = ft[0]
@@ -265,6 +233,10 @@ def configuration(request):
     context['database_size_bytes'] = get_directory_size_bytes(c.directory)
     context['database_size_kbytes'] = get_directory_size_bytes(c.directory)/1024
     context['database_size_mbytes'] = get_directory_size_bytes(c.directory)/1024/1024
+
+    if c.server_log_file.exists():
+        with open(c.server_log_file.resolve(), "r") as fh:
+             context['server_log_data'] = fh.read()
 
     return render(request, app_name / 'configuration.html', context)
 

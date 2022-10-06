@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from datetime import datetime
 
 
 class LinkDataModel(models.Model):
@@ -12,7 +13,7 @@ class LinkDataModel(models.Model):
     subcategory = models.CharField(max_length=1000)
     tag = models.CharField(max_length=1000)
     date_saved = models.DateTimeField(auto_now = True)
-    date_created = models.DateTimeField(auto_now = False, auto_now_add = False)
+    date_created = models.DateTimeField(auto_now = False, auto_now_add = False, default = datetime.now)
 
     class Meta:
         ordering = ['date_created', 'artist', 'album', 'title']

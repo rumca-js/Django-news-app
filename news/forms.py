@@ -3,14 +3,6 @@ from .models import LinkDataModel
 
 # https://docs.djangoproject.com/en/4.1/ref/forms/widgets/
 
-#class NewLinkForm(forms.Form):
-#    """
-#    New link form
-#    """
-#    class Meta:
-#        model = LinkDataModel
-#        fields = ['url', 'category', 'subcategory', 'artist', 'album', 'title', 'date_created']
-
 
 class NewLinkForm(forms.ModelForm):
     """
@@ -22,7 +14,7 @@ class NewLinkForm(forms.ModelForm):
         widgets = {
          #'git_token': forms.PasswordInput(),
         }
-        exclude = ('date_created',)
+        #exclude = ('date_created',)
 
 
 class ImportLinksForm(forms.Form):

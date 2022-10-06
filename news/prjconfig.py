@@ -1,4 +1,6 @@
 from pathlib import Path
+import logging
+
 from .threads import *
 from .basictypes import *
 
@@ -12,7 +14,7 @@ class Configuration(object):
        self.directory = Path(".").resolve()
        self.links_directory = self.directory / "link_files"
        self.version = __version__
-       self.server_log_file = self.directory / "server_log_file.txt"
+       self.server_log_file = self.directory / "log_server.txt"
 
        self.enable_logging()
 
@@ -34,4 +36,4 @@ class Configuration(object):
 
        self.server_log_file.unlink(True)
 
-       logging.basicConfig(level=logging.INFO, filename=self.server_log_file)
+       logging.basicConfig(level=logging.INFO, filename=self.server_log_file, format='[%(asctime)s]%(levelname)s:%(message)s')
