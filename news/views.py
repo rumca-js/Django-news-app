@@ -20,7 +20,7 @@ def init_context(context):
     context["django_app"] = str(app_name)
     context["base_generic"] = str(app_name / "base_generic.html")
 
-    c = Configuration.get_object()
+    c = Configuration.get_object(str(app_name))
     context['app_version'] = c.version
 
     return context
@@ -227,7 +227,7 @@ def configuration(request):
     if not request.user.is_authenticated:
         return render(request, app_name / 'missing_rights.html', context)
     
-    c = Configuration.get_object()
+    c = Configuration.get_object(str(app_name))
     context['directory'] = c.directory
     context['version'] = c.version
     context['database_size_bytes'] = get_directory_size_bytes(c.directory)
