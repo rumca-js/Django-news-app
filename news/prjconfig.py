@@ -12,7 +12,7 @@ class Configuration(object):
 
    def __init__(self, app_name):
        self.app_name = app_name
-       self.directory = Path("/home/rumpel/WorkDir/DjangoPage/linklibrary")
+       self.directory = Path(".")
        self.links_directory = self.directory / "link_files"
        self.version = __version__
 
