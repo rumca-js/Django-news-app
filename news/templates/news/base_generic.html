@@ -37,13 +37,14 @@
                         Configuration</div></a></li>
 
             <hr>
-            <li><a href="{% url 'admin:logout' %}">
+            <li>User: {{ user.get_username }}</li>
+            <li><a href="{% url 'news:logout' %}">
                     <div class="mainbutton">
                         <img src="{% static 'news/icons/icons8-logout-100.png' %}" height=30px />
                         Logout</div></a></li>
             {% else %}
             <hr>
-            <li><a href="{% url 'admin:login' %}">
+            <li><a href="{% url 'news:login' %}">
                     <div class="mainbutton">
                         <img src="{% static 'news/icons/icons8-login-100.png' %}" height=30px />
                         Login</div></a></li>
