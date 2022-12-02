@@ -85,7 +85,7 @@ def add_link(request):
     context = get_context(request)
     context['page_title'] += " - Add link"
 
-    if not request.user.is_authenticated:
+    if not request.user.is_staff:
         return render(request, app_name / 'missing_rights.html', context)
 
     # if this is a POST request we need to process the form data
@@ -130,7 +130,7 @@ def import_links(request):
     context = get_context(request)
     context['page_title'] += " - Import links"
 
-    if not request.user.is_authenticated:
+    if not request.user.is_staff:
         return render(request, app_name / 'missing_rights.html', context)
 
     # if this is a POST request we need to process the form data
@@ -176,7 +176,7 @@ def remove_link(request, pk):
     context = get_context(request)
     context['page_title'] += " - Remove link"
 
-    if not request.user.is_authenticated:
+    if not request.user.is_staff:
         return render(request, app_name / 'missing_rights.html', context)
 
     ft = LinkDataModel.objects.filter(id=pk)
@@ -191,7 +191,7 @@ def remove_all_links(request):
     context = get_context(request)
     context['page_title'] += " - Remove all links"
 
-    if not request.user.is_authenticated:
+    if not request.user.is_staff:
         return render(request, app_name / 'missing_rights.html', context)
 
     ft = LinkDataModel.objects.all()
@@ -224,7 +224,7 @@ def configuration(request):
     context = get_context(request)
     context['page_title'] += " - Configuration"
 
-    if not request.user.is_authenticated:
+    if not request.user.is_staff:
         return render(request, app_name / 'missing_rights.html', context)
     
     c = Configuration.get_object(str(app_name))
@@ -246,7 +246,7 @@ def edit_link(request, pk):
     context['page_title'] += " - Edit link"
     context['pk'] = pk
 
-    if not request.user.is_authenticated:
+    if not request.user.is_staff:
         return render(request, app_name / 'missing_rights.html', context)
 
     ft = LinkDataModel.objects.filter(id=pk)

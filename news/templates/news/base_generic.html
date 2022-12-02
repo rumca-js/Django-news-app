@@ -25,7 +25,7 @@
                     <div class="mainbutton">
                         <img src="{% static 'news/icons/icons8-link-90.png' %}" height=30px />
                         All links</div></a></li>
-            {% if user.is_authenticated %}
+            {% if user.is_staff %}
             <hr>
             <li><a href="{% url 'news:addlink' %}">
                     <div class="mainbutton">

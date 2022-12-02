@@ -12,7 +12,7 @@
       <span><strong>Date Created:</strong> {{ date_created }}</span>
   </p>
 
-  {% if user.is_authenticated %}
+  {% if user.is_staff %}
     <a href="/{{django_app}}/editlink/{{ object.id }}" class="simplebutton">Edit link</a>
     <a href="/{{django_app}}/removelink/{{ object.id }}" class="simplebutton">Remove link</a>
   {% endif %}
